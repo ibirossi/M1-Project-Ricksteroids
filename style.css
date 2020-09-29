@@ -44,9 +44,10 @@ background-size: cover;
   height:50px;
 }
 
-.game-over {
-
+#gameOver-screen {
+  display: none;
   height: 500px;
   background-color: black;
+  color: white;
 
 }

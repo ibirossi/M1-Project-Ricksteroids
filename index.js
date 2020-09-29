@@ -104,7 +104,7 @@ document.addEventListener('mouseup', () => {
 
 
 function startGame(){
-    
+    console.log('whatever')
     
     
     ctx.drawImage(bg, 0, 0, bgW, bgH)
@@ -253,12 +253,12 @@ function startGame(){
                 
             }, 10);  
 
-                gameOver()
+               
 
             
                 setTimeout(() => {
-                clearInterval(intervalId)
-                alert ('Game Over')
+                    gameOver()
+                
              }, 4000);
             
         }
@@ -328,33 +328,50 @@ const  addCanvas = () => {
 }
 
 const gameOver = () => {
+    
+    let gameOverScreen=document.querySelector('#gameOver-screen')
+    theme.pause()
+    theme.currentTime = 0
+
+    console.log('sound')
+    clearInterval(intervalId)
+    
+    console.log(canvas.parentNode)
+
+    canvas.style.display = 'none'
+    console.log('hello')
+
+    gameOverScreen.style.display='block'
+
 
     //ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    CancelAnimationFrame()
+    //console.log(intervalId)
 
-    let gameBody = document.querySelector ('body')
-    let zeroCanvas = document.querySelector ('#myCanvas')
+    //let gameBody = document.querySelector ('div')
+    //let zeroCanvas = document.querySelector ('canvas')
 
-    gameBody.removeChild (zeroCanvas)
+    //gameBody.removeChild (zeroCanvas)
 
-    let gameOverContainer = document.createElement ('div')
-    gameOverContainer.innerHTML = `<div class=text>
-    <div class="text-box">
-    <p>text here</p>
-    <p>text here</p>
-    <img id="start-btn" src="images/startbutton.png">
-    </div>`
-    
-    body.appendChild(gameOverContainer)
+    //let gameOverContainer = document.createElement ('div')
+    //gameOverContainer.innerHTML = `<div class=text>
+    //<div class="text-box">
+    //<p>text here</p>
+    //<p>text here</p>
+    //<img id="start-btn" src="images/startbutton.png">
+    //</div>`
+    //
+    //body.appendChild(gameOverContainer)
 
     
 }
 
 
+
 let startButton = document.querySelector('#start-btn')
     startButton.addEventListener('click',() => {
     console.log('click')
+    
     addCanvas()
     intervalId = setInterval(() => {
     
