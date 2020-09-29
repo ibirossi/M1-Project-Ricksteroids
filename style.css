@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+
+
+.splash
+{
+background-image: url("images/bg.png"); 
+background-position: 0 0; 
+background-repeat: no-repeat;
+background-size: cover;
+  
+  position: relative; 
+
+} 
+
+.splash{
+    height: 500px
+}
+
+.text-box{
+    font-family: "Get Schwifty";
+    line-height: 2em;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    width: 300px;
+    margin: 0 auto;
+    color:lime;
+    background-color:black;
+    border-radius: 25px;
+    height:500px;
+    
+    
+}
+#start-btn{
+  width:100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+#start-btn img{
+  width: 50px;
+  height:50px;
+}
+
+.game-over {
+
+  height: 500px;
+  background-color: black;
+
+}

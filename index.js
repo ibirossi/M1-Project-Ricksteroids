@@ -1,15 +1,18 @@
-let canvas = document.querySelector('canvas')
-canvas.style.border = '1px solid black';
+let canvas
+let ctx 
+let intervalId 
 
-let ctx = canvas.getContext('2d')
-let intervalId = 0;
+
+
+
+
 
 //let speed =10
 
 let bg = new Image()
 bg.src = 'images/stars.jpg'
-let bgW = canvas.width
-let bgH =canvas.height
+let bgW 
+let bgH 
 
 let rick = new Image()
 rick.src = 'images/rickfingerEdit3.png'
@@ -41,9 +44,19 @@ mortyscream.src = 'sounds/mortyscream.mp3'
 
 let explosion1= new Audio()
 explosion1.src ='sounds/explosion1.wav'
+explosion1.volume = 0.4
 
 let jeez = new Audio()
 jeez.src = 'sounds/jeez.mp3'
+jeez.volume = 0.3
+
+let thrust = new Audio()
+thrust.src = 'sounds/thruster2.mp3'
+thrust.volume=0.2
+
+let theme = new Audio()
+theme.src = 'sounds/theme.mp3'
+theme.volume = 0.1
 
 
 let shields = 5
@@ -52,27 +65,31 @@ let rickX = 50;
 let rickY = 50;
 let rickIncrement = 1;
 let constIncrement= 100;
-let spawn = 600
+let spawn = 850
 let speed =1
+let collisions = 0
 
 
 
-
+//let asteroids=  []
 
 
 let asteroids = [
-     {x: canvas.width-10, y: canvas.height},
+     {x: 890, y: 500},
     ]
 
     let asteroids2 = [
-        {x: canvas.width-10, y: canvas.height},
+        {x: 890, y: 500},
        ]
+
+
 
 
 document.addEventListener('mousedown', (event) => {
     
     
     rickIncrement = -2
+    thrust.play()
 
     })
 
@@ -85,7 +102,9 @@ document.addEventListener('mouseup', () => {
 
 
 
+
 function startGame(){
+    
     
     
     ctx.drawImage(bg, 0, 0, bgW, bgH)
@@ -95,6 +114,7 @@ function startGame(){
         speed=2
     }
 
+   
     
 
    
@@ -117,6 +137,9 @@ function startGame(){
         //ctx.drawImage(ast3, asteroids[i].x+constant+100, asteroids[i].y+constant -50)
         //}
         
+        
+
+
         asteroids[i].x-=speed
         //asteroids2[i].x-=speed
 
@@ -168,13 +191,14 @@ function startGame(){
 
             explosion1.play()
             
+            collisions = collisions+1
+
             if (shields>0){
                 shields--
                 //mask += 40
             }
 
-
-
+            
             if (shields===4 || shields===2){
                 mortyscream.play()
             }
@@ -182,6 +206,8 @@ function startGame(){
             else if(shields===3 || shields===1){
                 jeez.play()
             }
+
+
             
             
             let startTime = new Date().getTime();
@@ -191,7 +217,7 @@ function startGame(){
                     
                 }
                 ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
-                ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
+                //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
                 rickX=rickX+(Math.round(Math.random()*2))
                 rickX=rickX-(Math.round(Math.random()*2))
                 
@@ -210,30 +236,57 @@ function startGame(){
     //    }
     //}
    
-    //if (rickY > canvas.height-100) {
-    //    clearInterval(intervalId)
-    //    alert('Game Over')
-   // }
-    
-   
-   }
+            if (rickY > canvas.height+rick.height+10 || collisions>=6) {
+
+                let startTime = new Date().getTime();
+                let drawIntId2 = setInterval(()=>{
+                if(new Date().getTime() - startTime > 1000){
+                    clearInterval(drawIntId2);
+                    
+            }
+
+                ctx.drawImage(bang1,Math.round(Math.random()*canvas.width), Math.round(Math.random()*canvas.height))
+                //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
+                rickX=rickX+(Math.round(Math.random()*2))
+                //rickX=rickX-(Math.round(Math.random()*2))
+                
+                
+            }, 10);  
+
+                gameOver()
+
+            
+                setTimeout(() => {
+                clearInterval(intervalId)
+                alert ('Game Over')
+             }, 4000);
+            
+        }
+     }
+
+
     rickY += rickIncrement
-    //ctx.drawImage(fg, 0, canvas.height-100)
-    ctx.fillStyle= 'white'
-    ctx.font = '20px Verdana'
+    
+    //Set score and shield style
+    ctx.fillStyle= 'limegreen'
+    ctx.font = '20px Get Schwifty'
     ctx.fillText('Score: ' + score, 10,490 )
     ctx.fill()
 
     
 			if (shields>1){
-				ctx.fillStyle= 'green'
+                ctx.fillStyle= '#49eb34'
+                theme.play();
+                
+                
 			}
 			else ctx.fillStyle='red'
 			ctx.fillRect (250, 480, 20*shields, 10)
 			ctx.fill()
 			
 			if (shields==0){
-				ctx.fillText ('SHIELDS GONE!', 10, 350)
+                ctx.fillText ('SHIELDS GONE!', 10, 350)
+               
 			}
 
 			if (shields==1){
@@ -247,12 +300,64 @@ function startGame(){
             
         }
 
-        
-        
-
+       
         
 
-intervalId = setInterval(() => {
 
-    requestAnimationFrame(startGame)
-},10)
+
+const  addCanvas = () => {
+
+    let body = document.querySelector ('body')
+    let splashScreen = document.querySelector ('.splash')
+
+    body.removeChild (splashScreen)
+ 
+    let canvasContainer = document.createElement('div')
+    canvasContainer.innerHTML = `<canvas id="myCanvas" width="900" height="500"></canvas>`
+
+    body.appendChild (canvasContainer)
+
+    canvas = document.querySelector('canvas')
+    canvas.style.border = '1px solid black';
+ 
+    ctx = canvas.getContext('2d')
+    intervalId = 0;
+    bgW = canvas.width
+    bgH =canvas.height
+
+}
+
+const gameOver = () => {
+
+    //ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    CancelAnimationFrame()
+
+    let gameBody = document.querySelector ('body')
+    let zeroCanvas = document.querySelector ('#myCanvas')
+
+    gameBody.removeChild (zeroCanvas)
+
+    let gameOverContainer = document.createElement ('div')
+    gameOverContainer.innerHTML = `<div class=text>
+    <div class="text-box">
+    <p>text here</p>
+    <p>text here</p>
+    <img id="start-btn" src="images/startbutton.png">
+    </div>`
+    
+    body.appendChild(gameOverContainer)
+
+    
+}
+
+
+let startButton = document.querySelector('#start-btn')
+    startButton.addEventListener('click',() => {
+    console.log('click')
+    addCanvas()
+    intervalId = setInterval(() => {
+    
+        requestAnimationFrame(startGame)
+    },10)
+})
