@@ -87,3 +87,26 @@ background-size: cover;
     text-decoration: none;
     color: hotpink;
 }
+
+
+.canvas-container{
+  
+  display: flex;
+  align-content: center;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  background-image: url("images/stars.jpg"); 
+  background-position: 0 0; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative; 
+  background-color: black;
+}
+
+#myCanvas{
+  width: 95%;
+  height: 500px;
+}

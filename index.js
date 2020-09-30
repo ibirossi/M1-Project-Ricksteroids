@@ -23,10 +23,6 @@ bang1.src = 'images/explosion.png'
 let bang2= new Image()
 bang2.src = 'images/bang2.png'
 
-//let fg = new Image()
-//fg.src = 'images/fg.png'
-
-
 let ast1= new Image()
 ast1.src ='images/asteroid.png'
 
@@ -58,6 +54,10 @@ let theme = new Audio()
 theme.src = 'sounds/theme.mp3'
 theme.volume = 0.1
 
+let endTheme = new Audio()
+endTheme.src = 'sounds/game-over.mp3'
+endTheme.volume = 0.2
+
 let shields
 let score 
 let rickX 
@@ -67,108 +67,67 @@ let constIncrement
 let spawn
 let speed 
 let collisions
-
-
-
-//let asteroids=  []
-
-
 let asteroids 
 let asteroids2 
 
 function initializeVariables(){
-     shields = 5
- score = 0;
- rickX = 50;
- rickY = 50;
- rickIncrement = 1;
- constIncrement= 100;
- spawn = 850
- speed =1
- collisions = 0
+    shields = 5
+    score = 0;
+    rickX = 50;
+    rickY = 50;
+    rickIncrement = 1;
+    constIncrement= 100;
+    spawn = 850
+    speed =1
+    collisions = 0
 
-
-
-//let asteroids=  []
-
-
- asteroids = [
-     {x: 890, y: 500},
+    asteroids = [
+    {x: 890, y: 500},
     ]
 
-     asteroids2 = [
-        {x: 890, y: 500},
-       ]
+    asteroids2 = [
+    {x: 890, y: 500},
+    ]
 }
 
 
-
-
-document.addEventListener('mousedown', (event) => {
-    
-    
-    rickIncrement = -2
-    thrust.play()
-
+    document.addEventListener('mousedown', (event) => {
+        rickIncrement = -2
+        thrust.play()
     })
 
-document.addEventListener('mouseup', () => {
-    
-   
-    rickIncrement = 1
-    
-})
+    document.addEventListener('mouseup', () => {
+        rickIncrement = 1
+    })
 
 
-
-
-function startGame(){
-    console.log('whatever')
-    
-    
-    ctx.drawImage(bg, 0, 0, bgW, bgH)
-    ctx.drawImage(rick, rickX, rickY)
-
-    if (score>=20){
+    function startGame(){
+        ctx.drawImage(bg, 0, 0, bgW, bgH)
+        ctx.drawImage(rick, rickX, rickY)
+        if (score>=20){
         speed=2
     }
 
-   
-    
-
-   
-
-
-    for(let i=0; i< asteroids.length; i++){
+        for(let i=0; i< asteroids.length; i++){
         
-        let constant = ast1.height + constIncrement  
-      
-        ctx.drawImage(ast1, asteroids[i].x, asteroids[i].y)
+            let constant = ast1.height + constIncrement  
+            ctx.drawImage(ast1, asteroids[i].x, asteroids[i].y)
 
-        //if (score>=20){
-//
-        //    ctx.drawImage(ast2, asteroids2[i].x+constant, asteroids2[i].y+constant)
-        //}
-        //
+            //if (score>=20){
+            //ctx.drawImage(ast2, asteroids2[i].x+constant, asteroids2[i].y+constant)           
+            //}        
+            
+            //if (score>=20 && score <=30)  
+            //ctx.drawImage(ast3, asteroids[i].x+constant+100, asteroids[i].y+constant -50    
+            //}
+            asteroids[i].x-=speed
+            //asteroids2[i].x-=speed
         
-
-        //if (score>=20 && score <=30){
-        //ctx.drawImage(ast3, asteroids[i].x+constant+100, asteroids[i].y+constant -50)
-        //}
-        
-        
-
-
-        asteroids[i].x-=speed
-        //asteroids2[i].x-=speed
-
-         
-       if (asteroids[i].x === 10 || asteroids2[i].x === 10 ) {
+            if (asteroids[i].x === 10 || asteroids2[i].x === 10 ) {
             score++
             //speed *+speed
             //constIncrement -=5
-            
-        }
+            }
 
         if (asteroids[i].x === spawn || asteroids[i].x === spawn ) {
             
@@ -180,20 +139,9 @@ function startGame(){
                     x: canvas.width,
                     y: Math.floor(Math.random() * canvas.height)
             })
-        
-           
-   
-        
-}
+        }
     
-//if (asteroids[i].length < spawn ) {
-//        if (Math.random()<0.10){
-//        asteroids.push({
-//            x: canvas.width,
-//            y: Math.floor(Math.random() * canvas.height)
-//            
-//        })
-//    }
+
 
         if(asteroids[i].x<=(rickX+rick.width) && asteroids[i].x+ast1.width>=rickX  && asteroids[i].y<=(rickY+(rick.height)) && asteroids[i].y+ast1.height>rickY  /*|| 
         asteroids2[i].x<=(rickX+rick.width) && asteroids2[i].x+ast2.width>=rickX && asteroids2[i].y<=(rickY+(rick.height)) && asteroids2[i].y+ast2.height>rickY*/){
@@ -204,7 +152,6 @@ function startGame(){
    // //second asteroid collision
    // let asteroid2Collision = asteroids2[i].x<=(rickX+rick.width) && asteroids2[i].x + ast2.width>=rickX && asteroids2[i].y<=(rickY+(rick.height)) && asteroids2[i].y + ast2.height>rickY
    // if( asteroid1Collision || asteroid2Collision){
-
 
             asteroids[i].x *=-1
 
@@ -217,7 +164,6 @@ function startGame(){
                 //mask += 40
             }
 
-            
             if (shields===4 || shields===2){
                 mortyscream.play()
             }
@@ -226,36 +172,20 @@ function startGame(){
                 jeez.play()
             }
 
-
-            
-            
             let startTime = new Date().getTime();
             let drawIntId = setInterval(()=>{
                 if(new Date().getTime() - startTime > 2000){
                     clearInterval(drawIntId);
-                    
                 }
                 ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
                 //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
                 rickX=rickX+(Math.round(Math.random()*2))
                 rickX=rickX-(Math.round(Math.random()*2))
-                
-                
-            }, 10);      
-
             
- }
+            }, 10);      
+        }
 
-        
-    //    Collision logic. Try and break it down to understand. Don't panic
-    //    if( birdX + bird.width >= pipes[i].x && birdX <= pipes[i].x + pipeNorth.width && (birdY <= pipes[i].y + pipeNorth.height || birdY+bird.height >= pipes[i].y+constant) || birdY + bird.height >=  canvas.height - fg.height){
-    //     clearInterval(intervalId);
-    //        alert('GAME OVER');
-    //        location.reload(); 
-    //    }
-    //}
-   
-            if (rickY > canvas.height+rick.height+10 || collisions>=6) {
+                if (rickY > canvas.height+rick.height+10 || collisions>=6) {
                 
                 let startTime = new Date().getTime();
                 let drawIntId2 = setInterval(()=>{
@@ -275,31 +205,28 @@ function startGame(){
                
                 if (!gameIsEnding){
                     gameIsEnding=true
-                setTimeout(() => {
+                    setTimeout(() => {
                     gameOver()
-                
-             }, 4000);
+                }, 4000);
             }
         }
      }
 
 
-    rickY += rickIncrement
+            rickY += rickIncrement
     
-    //Set score and shield style
-    ctx.fillStyle= 'limegreen'
-    ctx.font = '20px Get Schwifty'
-    ctx.fillText('Score: ' + score, 10,490 )
-    ctx.fill()
+            //Set score and shield style
+            ctx.fillStyle= 'limegreen'
+            ctx.font = '20px Get Schwifty'
+            ctx.fillText('Score: ' + score, 10,490 )
+            ctx.fill()
 
-    
-			if (shields>1){
+            if (shields>1){
                 ctx.fillStyle= '#49eb34'
-                //theme.play();
-                
-                
-			}
-			else ctx.fillStyle='red'
+                theme.play();
+            }
+            
+            else ctx.fillStyle='red'
 			ctx.fillRect (250, 480, 20*shields, 10)
 			ctx.fill()
 			
@@ -312,11 +239,10 @@ function startGame(){
 			ctx.fillText ('SHIELDS LOW', 10, 350)
 			ctx.fillText ('shields:'+shields, 10, 400)
 
-			}
+            }
+            
 			else ctx.fillText ('shields:'+shields, 160, 490)
-            
-            
-            
+        
         }
 
        
@@ -337,7 +263,7 @@ const  addCanvas = () => {
  
     let canvasContainer = document.createElement('div')
     canvasContainer.className= 'canvas-container'
-    canvasContainer.innerHTML = `<canvas id="myCanvas" width="900" height="500"></canvas>`
+    canvasContainer.innerHTML = `<canvas id="myCanvas" width="1000" height="500"></canvas>`
 
     body.appendChild (canvasContainer)
 
@@ -376,18 +302,27 @@ const gameOver = () => {
     <p> <a class="leave-game" href="https://www.youtube.com/watch?v=YgSPaXgAdzE" target="_blank">Or give up?</a></p>
     </div>`
 
-    
+    endTheme.play()
     
     gameBody.appendChild(gameOverContainer)
-
+    
+    let leave =document.querySelector('.leave-game')
+    leave.addEventListener('click',() => {
+        endTheme.pause()
+        endTheme.currentTime = 0
+    })
+    
     startHanlder()
 }
 
 function startHanlder () {
+    
     console.log(document)
     let startButton = document.querySelector('#start-btn')
     startButton.addEventListener('click',() => {
     console.log('click')
+    endTheme.pause()
+    endTheme.currentTime = 0
     initializeVariables()
     addCanvas()
     intervalId = setInterval(() => {
