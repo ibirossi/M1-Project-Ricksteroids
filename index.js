@@ -1,7 +1,7 @@
 let canvas
 let ctx 
 let intervalId 
-let gameIsEnding =false
+let gameIsEnding = false
 
 
 
@@ -69,6 +69,7 @@ let speed
 let collisions
 let asteroids 
 let asteroids2 
+let leave
 
 function initializeVariables(){
     shields = 5
@@ -80,7 +81,7 @@ function initializeVariables(){
     spawn = 850
     speed =1
     collisions = 0
-
+    gameIsEnding = false
     asteroids = [
     {x: 890, y: 500},
     ]
@@ -306,13 +307,13 @@ const gameOver = () => {
     
     gameBody.appendChild(gameOverContainer)
     
-    let leave =document.querySelector('.leave-game')
+    startHanlder()
+
+    leave = document.querySelector('.leave-game')
     leave.addEventListener('click',() => {
         endTheme.pause()
         endTheme.currentTime = 0
     })
-    
-    startHanlder()
 }
 
 function startHanlder () {
@@ -320,7 +321,8 @@ function startHanlder () {
     console.log(document)
     let startButton = document.querySelector('#start-btn')
     startButton.addEventListener('click',() => {
-    console.log('click')
+    theme.pause()
+    theme.currentTime =0
     endTheme.pause()
     endTheme.currentTime = 0
     initializeVariables()
