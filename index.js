@@ -1,7 +1,7 @@
 let canvas
 let ctx 
 let intervalId 
-
+let gameIsEnding =false
 
 
 
@@ -58,29 +58,48 @@ let theme = new Audio()
 theme.src = 'sounds/theme.mp3'
 theme.volume = 0.1
 
-
-let shields = 5
-let score = 0;
-let rickX = 50;
-let rickY = 50;
-let rickIncrement = 1;
-let constIncrement= 100;
-let spawn = 850
-let speed =1
-let collisions = 0
+let shields
+let score 
+let rickX 
+let rickY 
+let rickIncrement 
+let constIncrement
+let spawn
+let speed 
+let collisions
 
 
 
 //let asteroids=  []
 
 
-let asteroids = [
+let asteroids 
+let asteroids2 
+
+function initializeVariables(){
+     shields = 5
+ score = 0;
+ rickX = 50;
+ rickY = 50;
+ rickIncrement = 1;
+ constIncrement= 100;
+ spawn = 850
+ speed =1
+ collisions = 0
+
+
+
+//let asteroids=  []
+
+
+ asteroids = [
      {x: 890, y: 500},
     ]
 
-    let asteroids2 = [
+     asteroids2 = [
         {x: 890, y: 500},
        ]
+}
 
 
 
@@ -237,7 +256,7 @@ function startGame(){
     //}
    
             if (rickY > canvas.height+rick.height+10 || collisions>=6) {
-
+                
                 let startTime = new Date().getTime();
                 let drawIntId2 = setInterval(()=>{
                 if(new Date().getTime() - startTime > 1000){
@@ -254,13 +273,13 @@ function startGame(){
             }, 10);  
 
                
-
-            
+                if (!gameIsEnding){
+                    gameIsEnding=true
                 setTimeout(() => {
                     gameOver()
                 
              }, 4000);
-            
+            }
         }
      }
 
@@ -276,7 +295,7 @@ function startGame(){
     
 			if (shields>1){
                 ctx.fillStyle= '#49eb34'
-                theme.play();
+                //theme.play();
                 
                 
 			}
@@ -301,18 +320,23 @@ function startGame(){
         }
 
        
-        
-
-
-
 const  addCanvas = () => {
 
     let body = document.querySelector ('body')
     let splashScreen = document.querySelector ('.splash')
-
-    body.removeChild (splashScreen)
+    if (splashScreen) {
+        body.removeChild (splashScreen)
+    }
+    else {
+        //remove the game over screen
+        //    - get this dom element 'game-over'
+        let removeGameOver = document.querySelector('.game-over')
+        body.removeChild(removeGameOver)
+    }
+    
  
     let canvasContainer = document.createElement('div')
+    canvasContainer.className= 'canvas-container'
     canvasContainer.innerHTML = `<canvas id="myCanvas" width="900" height="500"></canvas>`
 
     body.appendChild (canvasContainer)
@@ -329,52 +353,49 @@ const  addCanvas = () => {
 
 const gameOver = () => {
     
-    let gameOverScreen=document.querySelector('#gameOver-screen')
     theme.pause()
     theme.currentTime = 0
 
-    console.log('sound')
     clearInterval(intervalId)
-    
-    console.log(canvas.parentNode)
-
-    canvas.style.display = 'none'
-    console.log('hello')
-
-    gameOverScreen.style.display='block'
-
-
-    //ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    //console.log(intervalId)
-
-    //let gameBody = document.querySelector ('div')
-    //let zeroCanvas = document.querySelector ('canvas')
-
-    //gameBody.removeChild (zeroCanvas)
-
-    //let gameOverContainer = document.createElement ('div')
-    //gameOverContainer.innerHTML = `<div class=text>
-    //<div class="text-box">
-    //<p>text here</p>
-    //<p>text here</p>
-    //<img id="start-btn" src="images/startbutton.png">
-    //</div>`
-    //
-    //body.appendChild(gameOverContainer)
+   
+    let gameBody = document.querySelector ('body')
+    let zeroCanvas = document.querySelector ('.canvas-container')
+    gameBody.removeChild (zeroCanvas)
+    let gameOverContainer = document.createElement ('div')
+    gameOverContainer.className = 'game-over'
+    gameOverContainer.innerHTML = `<div>
+    <h1 class="heading">
+        GAME OVERRRRR!
+    </h1>
+    <div class="deadpics">
+        <img id="mortydead" src="images/mortydead.png" alt="dead morty"> 
+        <img id="rickdead" src="images/rickdead.png" alt="dead rick">
+    </div>
+    <p>Play Again?</p>
+    <img id="start-btn" src="images/startbutton.png">
+    <p> <a class="leave-game" href="https://www.youtube.com/watch?v=YgSPaXgAdzE" target="_blank">Or give up?</a></p>
+    </div>`
 
     
+    
+    gameBody.appendChild(gameOverContainer)
+
+    startHanlder()
 }
 
-
-
-let startButton = document.querySelector('#start-btn')
+function startHanlder () {
+    console.log(document)
+    let startButton = document.querySelector('#start-btn')
     startButton.addEventListener('click',() => {
     console.log('click')
-    
+    initializeVariables()
     addCanvas()
     intervalId = setInterval(() => {
     
         requestAnimationFrame(startGame)
     },10)
-})
+    })
+}
+
+startHanlder()
+

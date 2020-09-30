@@ -44,10 +44,46 @@ background-size: cover;
   height:50px;
 }
 
-#gameOver-screen {
-  display: none;
+.game-over{
+
   height: 500px;
   background-color: black;
-  color: white;
+  font-family: "Get Schwifty";
+    line-height: 2em;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    color:lime;
+  
+}
 
+.game-over{
+
+  height: 500px;
+  background-color: black;
+  font-family: "Get Schwifty";
+    line-height: 2em;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    color:lime;
+  
+}
+
+.heading{
+    color: red;
+    font-family: "Get Schwifty";
+}
+
+.leave-game{
+    text-decoration: none;
+    color: hotpink;
 }
