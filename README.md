@@ -77,3 +77,4 @@ https://ibirossi.github.io/M1-Project-Ricksteroids/
 
 
 ### Slides
+https://docs.google.com/presentation/d/e/2PACX-1vTbXXWkM5bkWaanvMgGSaYdNiVXfLOirdKawlcw37z9ozq536PrVlR5r942rvA5oFsS4w-mTJoHS9Bd/pub?start=false&loop=false&delayms=5000
