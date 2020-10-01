@@ -89,6 +89,7 @@ function initializeVariables(){
     collisions = 0
     gameIsEnding = false
     elementsOutbound = 0
+    elementsOutbound2 = 0
     asteroids = [
     {x: 890, y: 500},
     ]
@@ -114,9 +115,9 @@ function startGame() {
     ctx.drawImage(bg, 0, 0, bgW, bgH)
     ctx.drawImage(rick, rickX, rickY)
     
-    if (score>=20){
-        speed=2
-    }
+    //if (score>=20){
+    //    speed=2
+    //}
 
     for(let i=0; i< asteroids.length; i++){
     
@@ -129,12 +130,12 @@ function startGame() {
         //if (score>=20 && score <=30)  
         //ctx.drawImage(ast3, asteroids[i].x+constant+100, asteroids[i].y+constant -50    
         //}
-        asteroids[i].x-=speed
+        asteroids[i].x-=speed2
         //asteroids2[i].x-=speed
     
         if (asteroids[i].x < 0) {
             score++
-            asteroids.shift()
+            elementsOutbound++
         }
         //if (asteroids2[i].x < 0) {
         //score++
@@ -159,11 +160,12 @@ function startGame() {
     
         let constant = ast2.height + constIncrement  
         ctx.drawImage(ast2, asteroids2[i].x, asteroids2[i].y)
-        asteroids2[i].x -= speed2
+        
+        asteroids2[i].x -= speed
     
         if (asteroids2[i].x < 0) {
             score++
-            elementsOutbound++
+            elementsOutbound2++
         }
 
         if (asteroids2[i].x === spawn ) {
@@ -177,23 +179,57 @@ function startGame() {
         // asteroids2[i].x<=(rickX+rick.width) && asteroids2[i].x+ast2.width>=rickX && asteroids2[i].y<=(rickY+(rick.height)) && asteroids2[i].y+ast2.height>rickY*/){
         
         // first asteroid collision
-        // let asteroid1Collision = asteroids[i].x<=(rickX+rick.width) && asteroids[i].x + ast1.width>=rickX  && asteroids[i].y<=(rickY+(rick.height)) && asteroids[i].y + ast1.height >rickY 
-        // second asteroid collision
         
+         //let asteroid1Collision = asteroids[i].x<=(rickX+rick.width) && asteroids[i].x + ast1.width>=rickX  && asteroids[i].y<=(rickY+(rick.height)) && asteroids[i].y + ast1.height >rickY 
+        
+        // second asteroid collision
         let asteroid2Collision = asteroids2[i].x<=(rickX+rick.width) && asteroids2[i].x + ast2.width>=rickX && asteroids2[i].y<=(rickY+(rick.height)) && asteroids2[i].y + ast2.height>rickY
         
+    //    if(asteroid1Collision){
+//
+    //        console.log(`Asteroid XY:${asteroids2[i].x},${asteroids2[i].y} :: Rick XY ${rickX},${rickY}`)
+    //        asteroids[i].x *=-1
+    //        
+    //        explosion1.play()
+    //        
+    //        collisions = collisions+1
+    //        
+    //        if (shields>0){
+    //            shields--
+    //        }
+    //        
+    //        if (shields===4 || shields===2){
+    //            mortyscream.play()
+    //        }
+    //        
+    //        else if(shields===3 || shields===1){
+    //            jeez.play()
+    //        }
+    //        
+    //        let startTime = new Date().getTime();
+    //        let drawIntId = setInterval(()=>{
+    //            if(new Date().getTime() - startTime > 2000){
+    //                clearInterval(drawIntId);
+    //            }
+    //            ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
+    //            //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
+    //            rickX=rickX+(Math.round(Math.random()*2))
+    //            rickX=rickX-(Math.round(Math.random()*2))
+    //        }, 10);      
+    //    }
+
         if(asteroid2Collision){
 
             console.log(`Asteroid XY:${asteroids2[i].x},${asteroids2[i].y} :: Rick XY ${rickX},${rickY}`)
-            asteroids[i].x *=-1
+            
             asteroids2[i].x *=-1
             
             explosion1.play()
             
             collisions = collisions+1
+            
             if (shields>0){
                 shields--
-                //mask += 40
             }
             
             if (shields===4 || shields===2){
@@ -241,11 +277,18 @@ function startGame() {
     }
 
     for (let i = 1; i <= elementsOutbound; i++) {
+        asteroids.shift()
+   }
+   
+   //console.log(elementsOutbound)
+   elementsOutbound = 0
+    
+   for (let i = 1; i <= elementsOutbound2; i++) {
          asteroids2.shift()
     }
     
-    console.log(elementsOutbound)
-    elementsOutbound = 0
+    //console.log (elementsOutbound2)
+    elementsOutbound2 = 0
        
 
     rickY += rickIncrement
@@ -357,16 +400,16 @@ function startHanlder () {
     console.log(document)
     let startButton = document.querySelector('#start-btn')
     startButton.addEventListener('click',() => {
-        theme.pause()
-        theme.currentTime =0
-        endTheme.pause()
-        endTheme.currentTime = 0
-        initializeVariables()
-        addCanvas()
-        intervalId = setInterval(() => {
-        
-            requestAnimationFrame(startGame)
-        },10)
+    theme.pause()
+    theme.currentTime =0
+    endTheme.pause()
+    endTheme.currentTime = 0
+    initializeVariables()
+    addCanvas()
+    intervalId = setInterval(() => {
+    
+        requestAnimationFrame(startGame)
+    },10)
     })
 }
 
