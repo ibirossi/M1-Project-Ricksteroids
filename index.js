@@ -37,26 +37,27 @@ rocket.src = 'images/rocket.png'
 
 let mortyscream = new Audio()
 mortyscream.src = 'sounds/mortyscream.mp3'
+mortyscream.volume = 0.01
 
 let explosion1= new Audio()
 explosion1.src ='sounds/explosion1.wav'
-explosion1.volume = 0.2
+explosion1.volume = 0.01
 
 let jeez = new Audio()
 jeez.src = 'sounds/jeez.mp3'
-jeez.volume = 0.3
+jeez.volume = 0.01
 
 let thrust = new Audio()
 thrust.src = 'sounds/thruster2.mp3'
-thrust.volume=0.04
+thrust.volume=0.01
 
 let theme = new Audio()
 theme.src = 'sounds/theme.mp3'
-theme.volume = 0.05
+theme.volume = 0.01
 
 let endTheme = new Audio()
 endTheme.src = 'sounds/game-over.mp3'
-endTheme.volume = 0.2
+endTheme.volume = 0.01
 
 let shields
 let score 
