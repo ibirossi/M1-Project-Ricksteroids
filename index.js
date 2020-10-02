@@ -3,19 +3,13 @@ let ctx
 let intervalId 
 let gameIsEnding = false
 
-
-
-
-
-//let speed =10
-
 let bg = new Image()
 bg.src = 'images/stars.jpg'
 let bgW 
 let bgH 
 
 let rick = new Image()
-rick.src = 'images/rickfingerEdit3.png'
+rick.src = 'images/ricknew3_1_60x60.png'
 
 let bang1= new Image()
 bang1.src = 'images/explosion.png'
@@ -32,8 +26,8 @@ ast2.src = 'images/asteroid 2.png'
 let ast3 = new Image ()
 ast3.src ='images/asteroidbig.png'
 
-let rocket = new Image()
-rocket.src = 'images/rocket.png'
+let blackHole = new Image ()
+blackHole.src = 'images/black-hole.png'
 
 let mortyscream = new Audio()
 mortyscream.src = 'sounds/mortyscream.mp3'
@@ -66,6 +60,7 @@ let rickY
 let rickIncrement 
 let constIncrement
 let spawn
+let spawnRnd
 let speed 
 let collisions
 let asteroids 
@@ -75,6 +70,10 @@ let astSH
 let astSW
 let astSRot
 let elementsOutbound
+let rightPressed 
+let leftPressed 
+let upPressed 
+let downPressed 
 
 
 
@@ -84,8 +83,13 @@ function initializeVariables(){
     rickX = 50;
     rickY = 50;
     rickIncrement = 1;
+    rightPressed = false;
+    leftPressed = false;
+    upPressed = false;
+    downPressed = false;
     constIncrement= 100;
-    spawn = 850
+    spawn = 880
+    spawnRnd = spawn-(Math.floor(Math.random()*5))
     speed =1
     speed2 =2
     collisions = 0
@@ -93,7 +97,7 @@ function initializeVariables(){
     elementsOutbound = 0
     elementsOutbound2 = 0
     asteroids = [
-    {x: 890, y: 500},
+    {x: 890, y: 500}
     ]
 
     asteroids2 = [
@@ -102,34 +106,30 @@ function initializeVariables(){
 }
 
 
-document.addEventListener('mousedown', (event) => {
-    rickIncrement = -2
-    thrust.play()
-})
-
-document.addEventListener('mouseup', () => {
-    rickIncrement = 1
-})
+//document.addEventListener('mousedown', (event) => {
+//    rickIncrement = -2
+//    thrust.play()
+//})
+//
+//document.addEventListener('mouseup', () => {
+//    rickIncrement = 2
+//})
 
 
 function startGame() { 
-
+    move()
     ctx.drawImage(bg, 0, 0, bgW, bgH)
     ctx.drawImage(rick, rickX, rickY)
     
-    //if (score>=20){
-    //    speed=2
-    //}
-
+    if (score >=10){
     for(let i=0; i< asteroids.length; i++){
     
-        let constant = ast1.height + constIncrement  
+        let constant = ast1.height + constIncrement
+        
         ctx.drawImage(ast1, asteroids[i].x, asteroids[i].y)
-                
         asteroids[i].x-=speed2
        
-    
-        if (asteroids[i].x < 0) {
+       if (asteroids[i].x < 0) {
             score++
             elementsOutbound++
         }
@@ -146,60 +146,57 @@ function startGame() {
 
         if(asteroid1Collision){
                     
-                    asteroids[i].x *=-1
-                    
-                    explosion1.play()
-                    
-                    collisions = collisions+1
-                    
-                    if (shields>0){
-                        shields--
-                    }
-                    
-                    if (shields===4 || shields===2){
-                        mortyscream.play()
-                    }
-                    
-                    else if(shields===3 || shields===1){
-                        jeez.play()
-                    }
-                    
-                    let startTime = new Date().getTime();
-                    let drawIntId = setInterval(()=>{
-                        if(new Date().getTime() - startTime > 2000){
-                            clearInterval(drawIntId);
-                        }
-                        ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
-                        //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
-                        rickX=rickX+(Math.round(Math.random()*2))
-                        rickX=rickX-(Math.round(Math.random()*2))
-                    }, 10);      
+                asteroids[i].x *=-1
+                
+                explosion1.play()
+                
+                collisions = collisions+1
+                
+                if (shields>0){
+                    shields--
                 }
+                
+                if (shields===4 || shields===2){
+                    mortyscream.play()
+                }
+                
+                else if(shields===3 || shields===1){
+                    jeez.play()
+                }
+                
+                let startTime = new Date().getTime();
+                let drawIntId = setInterval(()=>{
+                    if(new Date().getTime() - startTime > 2000){
+                        clearInterval(drawIntId);
+                    }
+                    ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
+                    rickX=rickX+(Math.round(Math.random()*2))
+                    rickX=rickX-(Math.round(Math.random()*2))
+                }, 10);      
+            }
 
-                if (rickY > canvas.height+rick.height+10 || (collisions>=6 && shields ===0)) {
-            
-                    let startTime = new Date().getTime();
-                    let drawIntId2 = setInterval(()=>{
-                    if(new Date().getTime() - startTime > 1000){
-                        clearInterval(drawIntId2);
-                        
-                        }
+            if (rickY > canvas.height+rick.height+10 || (collisions>=6 && shields ===0)) {
         
-                        ctx.drawImage(bang1,Math.round(Math.random()*canvas.width), Math.round(Math.random()*canvas.height))
-                        //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
-                        rickX=rickX+(Math.round(Math.random()*2))
-                        //rickX=rickX-(Math.round(Math.random()*2))
-                    }, 10);  
-                   
-                    if (!gameIsEnding){
-                        gameIsEnding=true
-                        setTimeout(() => {
-                            gameOver()
-                        }, 4000);
-                    }
+                let startTime = new Date().getTime();
+                let drawIntId2 = setInterval(()=>{
+                if(new Date().getTime() - startTime > 1000){
+                    clearInterval(drawIntId2);
+                    
                 }
+    
+                ctx.drawImage(bang1,Math.round(Math.random()*canvas.width), Math.round(Math.random()*canvas.height))
+                rickX=rickX+(Math.round(Math.random()*2))
+                }, 10);  
+               
+                if (!gameIsEnding){
+                    gameIsEnding=true
+                    setTimeout(() => {
+                        gameOver()
+                    }, 4000);
+                }
+            }
+        }
     }
-
 
     for(let i=0; i< asteroids2.length; i++){
     
@@ -213,55 +210,19 @@ function startGame() {
             elementsOutbound2++
         }
 
-        if (asteroids2[i].x === spawn ) {
+        if (asteroids2[i].x === spawn) {
             asteroids2.push({
                 x: canvas.width,
                 y: Math.floor(Math.random() * canvas.height)
             })
         }    
     
-        
-        // first asteroid collision
-        // let asteroid1Collision = asteroids[i].x<=(rickX+rick.width) && asteroids[i].x + ast1.width>=rickX  && asteroids[i].y<=(rickY+(rick.height)) && asteroids[i].y + ast1.height >rickY 
-        
         // second asteroid collision
         let asteroid2Collision = asteroids2[i].x<=(rickX+rick.width) && asteroids2[i].x + ast2.width>=rickX && asteroids2[i].y<=(rickY+(rick.height)) && asteroids2[i].y + ast2.height>rickY
         
-    //    if(asteroid1Collision){
-    //        
-    //        asteroids[i].x *=-1
-    //        
-    //        explosion1.play()
-    //        
-    //        collisions = collisions+1
-    //        
-    //        if (shields>0){
-    //            shields--
-    //        }
-    //        
-    //        if (shields===4 || shields===2){
-    //            mortyscream.play()
-    //        }
-    //        
-    //        else if(shields===3 || shields===1){
-    //            jeez.play()
-    //        }
-    //        
-    //        let startTime = new Date().getTime();
-    //        let drawIntId = setInterval(()=>{
-    //            if(new Date().getTime() - startTime > 2000){
-    //                clearInterval(drawIntId);
-    //            }
-    //            ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
-    //            //ctx.drawImage(bang1,rickX-Math.round(Math.random()*50), rickY-Math.round(Math.random()*50))
-    //            rickX=rickX+(Math.round(Math.random()*2))
-    //            rickX=rickX-(Math.round(Math.random()*2))
-    //        }, 10);      
-    //    }
-
         if(asteroid2Collision){
 
-            asteroids2[i].x *=-1
+            asteroids2[i].x =-1
             
             explosion1.play()
             
@@ -291,9 +252,7 @@ function startGame() {
             }, 10);      
         }
 
-        
-
-        if (rickY > canvas.height+rick.height+10 || (collisions>=6 && shields ===0)) {
+         if (rickY > canvas.height+rick.height+10 || (collisions>=6 && shields ===0)) {
             
             let startTime = new Date().getTime();
             let drawIntId2 = setInterval(()=>{
@@ -316,30 +275,32 @@ function startGame() {
             }
         }
     }
-
+// ---------------------------Game Start Loop Ends Here----------//
     for (let i = 1; i <= elementsOutbound; i++) {
         asteroids.shift()
    }
-   //console.log(elementsOutbound)
+
    elementsOutbound = 0
     
    for (let i = 1; i <= elementsOutbound2; i++) {
          asteroids2.shift()
     }
-    //console.log (elementsOutbound2)
+   
     elementsOutbound2 = 0
-       
-
+     
+    //Player falls if no button input
     rickY += rickIncrement
+    
+    
     //Set score and shield style
     ctx.fillStyle= 'limegreen'
     ctx.font = '20px Get Schwifty'
-    ctx.fillText('Score: ' + score, 10,490 )
+    ctx.fillText('Score: ' + score, 10, 490)
     ctx.fill()
 
-    if (score===10){
-        shields+1
-    }
+    //if (score>10){
+    //    shields = shields+1
+    //}
         
     if (collisions<6){
         theme.play();
@@ -367,6 +328,64 @@ function startGame() {
     }
         
 }
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+    rightPressed = true;
+    } 
+    else if (e.keyCode == 37) {
+    leftPressed = true;
+    }
+    else if (e.keyCode == 38) {
+        upPressed = true;
+        }
+    else if (e.keyCode == 40) {
+        downPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if(e.keyCode == 39) {
+    rightPressed = false;
+    console.log ('right')
+    }
+    else if(e.keyCode == 37) {
+    leftPressed = false;
+    console.log ('left')
+    }
+    else if(e.keyCode == 38) {
+    upPressed = false;
+    console.log ('up')
+    }
+    else if(e.keyCode == 40) {
+        downPressed = false;
+        console.log ('down')
+    }
+}
+
+function move(){
+    if (rightPressed && rickX < canvas.width-rick.width) {
+        rickX += 3;
+        thrust.play()
+    }
+    else if (leftPressed && rickX > 0) {
+        rickX -= 3;
+        thrust.play()
+    }
+
+    if (downPressed && rickY <canvas.height-rick.height) {
+        rickY +=3
+        thrust.play()
+    }
+
+    else if (upPressed && rickY > 0){
+        rickY -=3
+        thrust.play()
+    }
+}
   
 const  addCanvas = () => {
 
@@ -393,6 +412,7 @@ const  addCanvas = () => {
     intervalId = 0;
     bgW = canvas.width
     bgH =canvas.height
+    
 
 }
 
@@ -445,6 +465,7 @@ function startHanlder () {
     endTheme.currentTime = 0
     initializeVariables()
     addCanvas()
+
     intervalId = setInterval(() => {
     
         requestAnimationFrame(startGame)
@@ -454,3 +475,5 @@ function startHanlder () {
 
 startHanlder()
 
+// bounce objects
+// (asteroids[i].y+(Math.floor(Math.random()*100)))
