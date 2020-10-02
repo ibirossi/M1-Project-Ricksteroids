@@ -24,7 +24,7 @@ let ast2 = new Image()
 ast2.src = 'images/asteroid 2.png'
 
 let ast3 = new Image ()
-ast3.src ='images/asteroidbig.png'
+ast3.src ='images/asteroid3.png'
 
 let blackHole = new Image ()
 blackHole.src = 'images/black-hole.png'
@@ -53,11 +53,16 @@ let endTheme = new Audio()
 endTheme.src = 'sounds/game-over.mp3'
 endTheme.volume = 0.01
 
+let warning = new Audio ()
+warning.src = 'sounds/alarm.wav'
+warning.volume = 0.008
+
 let shields
 let score 
 let rickX 
 let rickY 
-let rickIncrement 
+let rickIncrement
+let rickIncrement2
 let constIncrement
 let spawn
 let spawnRnd
@@ -70,6 +75,8 @@ let astSH
 let astSW
 let astSRot
 let elementsOutbound
+let elementsOutbound2
+let elementsOutbound3
 let rightPressed 
 let leftPressed 
 let upPressed 
@@ -83,25 +90,31 @@ function initializeVariables(){
     rickX = 50;
     rickY = 50;
     rickIncrement = 1;
+    rickIncrement2 = 1;
     rightPressed = false;
     leftPressed = false;
     upPressed = false;
     downPressed = false;
     constIncrement= 100;
-    spawn = 880
-    spawnRnd = spawn-(Math.floor(Math.random()*5))
-    speed =1
-    speed2 =2
-    collisions = 0
-    gameIsEnding = false
-    elementsOutbound = 0
-    elementsOutbound2 = 0
+    spawn = 880;
+    speed =1;
+    speed2 =2;
+    collisions = 0;
+    gameIsEnding = false;
+    elementsOutbound = 0;
+    elementsOutbound2 = 0;
+    elementsOutbound3 = 0;
+    
     asteroids = [
     {x: 890, y: 500}
-    ]
+    ];
 
     asteroids2 = [
     {x: 890, y: 500},
+    ];
+
+    asteroids3 = [
+    {x: 890, y: 500}
     ]
 }
 
@@ -128,6 +141,7 @@ function startGame() {
         
         ctx.drawImage(ast1, asteroids[i].x, asteroids[i].y)
         asteroids[i].x-=speed2
+      
        
        if (asteroids[i].x < 0) {
             score++
@@ -198,6 +212,84 @@ function startGame() {
         }
     }
 
+    if (score >=30){
+        for(let i=0; i< asteroids3.length; i++){
+        
+            let constant = ast3.height + constIncrement
+            
+            ctx.drawImage(ast3, asteroids3[i].x, asteroids3[i].y)
+            asteroids3[i].x-=speed2
+            asteroids3[i].y-=speed
+           
+           if (asteroids3[i].x < 0) {
+                score++
+                elementsOutbound3++
+            }
+            
+            if (asteroids3[i].x === (spawn-400)) {
+                
+                asteroids3.push({
+                    x: canvas.width,
+                    y: Math.floor(Math.random() * canvas.height)
+                })
+            }
+            
+            let asteroid3Collision = asteroids3[i].x<=(rickX+rick.width) && asteroids3[i].x + ast3.width>=rickX  && asteroids3[i].y<=(rickY+(rick.height)) && asteroids3[i].y + ast3.height >rickY 
+    
+            if(asteroid3Collision){
+                        
+                    asteroids3[i].x *=-1
+                    
+                    explosion1.play()
+                    
+                    collisions = collisions+1
+                    
+                    if (shields>0){
+                        shields--
+                    }
+                    
+                    if (shields===4 || shields===2){
+                        mortyscream.play()
+                    }
+                    
+                    else if(shields===3 || shields===1){
+                        jeez.play()
+                    }
+                    
+                    let startTime = new Date().getTime();
+                    let drawIntId = setInterval(()=>{
+                        if(new Date().getTime() - startTime > 2000){
+                            clearInterval(drawIntId);
+                        }
+                        ctx.drawImage(bang1,rickX+Math.round(Math.random()*50), rickY+Math.round(Math.random()*50))
+                        rickX=rickX+(Math.round(Math.random()*2))
+                        rickX=rickX-(Math.round(Math.random()*2))
+                    }, 10);      
+                }
+    
+                if (rickY > canvas.height+rick.height+10 || (collisions>=6 && shields ===0)) {
+            
+                    let startTime = new Date().getTime();
+                    let drawIntId2 = setInterval(()=>{
+                    if(new Date().getTime() - startTime > 1000){
+                        clearInterval(drawIntId2);
+                        
+                    }
+        
+                    ctx.drawImage(bang1,Math.round(Math.random()*canvas.width), Math.round(Math.random()*canvas.height))
+                    rickX=rickX+(Math.round(Math.random()*2))
+                    }, 10);  
+                   
+                    if (!gameIsEnding){
+                        gameIsEnding=true
+                        setTimeout(() => {
+                            gameOver()
+                        }, 4000);
+                    }
+                }
+            }
+        }
+
     for(let i=0; i< asteroids2.length; i++){
     
         let constant = ast2.height + constIncrement  
@@ -252,7 +344,7 @@ function startGame() {
             }, 10);      
         }
 
-         if (rickY > canvas.height+rick.height+10 || (collisions>=6 && shields ===0)) {
+         if (rickY > canvas.height+rick.height+10|| (collisions>=6 && shields ===0)) {
             
             let startTime = new Date().getTime();
             let drawIntId2 = setInterval(()=>{
@@ -274,22 +366,31 @@ function startGame() {
                 }, 4000);
             }
         }
+
+        
     }
 // ---------------------------Game Start Loop Ends Here----------//
-    for (let i = 1; i <= elementsOutbound; i++) {
+for (let i = 1; i <= elementsOutbound; i++) {
         asteroids.shift()
    }
 
    elementsOutbound = 0
     
-   for (let i = 1; i <= elementsOutbound2; i++) {
+for (let i = 1; i <= elementsOutbound2; i++) {
          asteroids2.shift()
     }
    
     elementsOutbound2 = 0
+
+for (let i = 1; i <= elementsOutbound3; i++) {
+        asteroids3.shift()
+   }
+  
+   elementsOutbound3 = 0
      
     //Player falls if no button input
     rickY += rickIncrement
+    rickX -= rickIncrement2
     
     
     //Set score and shield style
@@ -318,6 +419,7 @@ function startGame() {
 			
 	if (shields==0){
         ctx.fillText ('SHIELDS GONE!', 10, 350)
+        warning.play()
     }
 
 	if (shields==1){
@@ -367,7 +469,7 @@ function keyUpHandler(e) {
 }
 
 function move(){
-    if (rightPressed && rickX < canvas.width-rick.width) {
+    if (rightPressed && rickX < 500-rick.width) {
         rickX += 3;
         thrust.play()
     }
